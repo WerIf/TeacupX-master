@@ -2,7 +2,7 @@ package com.lily.teacup.image_pool.cache.utils;
 
 import android.graphics.Bitmap;
 
-import com.july.teacup.ImageUtils.load.HttpImageLoadUtils;
+import com.lily.teacup.image_pool.load.HttpImageLoadUtils;
 
 public class NetWorkCacheUtils {
     private LocalCacheUtils mLocalCacheUtils;

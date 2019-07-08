@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 28
@@ -21,6 +22,13 @@ android {
         sourceCompatibility '1.8'
         targetCompatibility '1.8'
     }
+
+}
+
+greendao {
+    schemaVersion 1
+    daoPackage 'com.lily.teacupx.db'
+    targetGenDir 'src/main/java'
 }
 
 dependencies {
@@ -33,4 +41,9 @@ dependencies {
     implementation project(':teacup')
 
 
+    implementation 'com.github.navasmdc:MaterialDesign:1.5@aar'
+    implementation 'com.android.support:design:28.0.0'
+
+    implementation 'org.greenrobot:greendao:3.1.0'
+    implementation 'org.greenrobot:greendao-generator:3.1.0'
 }

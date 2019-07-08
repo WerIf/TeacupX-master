@@ -10,6 +10,10 @@ public class ToolBarOptions {
      */
     public String titleString;
     /**
+     * toolbar的title的字体颜色
+     */
+    public int titleColor;
+    /**
      * toolbar的logo资源id
      */
     public int logoId;
@@ -21,4 +25,6 @@ public class ToolBarOptions {
      * toolbar的返回按钮
      */
     public boolean isNeedNavigate;
+
+
 }

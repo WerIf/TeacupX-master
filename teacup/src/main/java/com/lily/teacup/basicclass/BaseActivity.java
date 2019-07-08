@@ -58,18 +58,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    protected void setToolbar(int toolbarId,boolean setBackIcon){
-        if(setBackIcon){
+    protected void setToolbar(int toolbarId){
             toolbar = findViewById(toolbarId);
             setSupportActionBar(toolbar);
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
-        }
     }
 
     protected void setToolbar(int toolbarId, ToolBarOptions options) {
         toolbar = findViewById(toolbarId);
+
         if (options.titleId != 0) {
             toolbar.setTitle(options.titleId);
         }
@@ -78,9 +77,15 @@ public abstract class BaseActivity extends AppCompatActivity {
             toolbar.setTitle(options.titleString);
         }
 
+        if(options.titleColor != 0){
+            toolbar.setTitleTextColor(options.titleColor);
+        }
+
         if (options.logoId != 0) {
             toolbar.setLogo(options.logoId);
         }
+
+
 
         if (options.isNeedNavigate) {
 

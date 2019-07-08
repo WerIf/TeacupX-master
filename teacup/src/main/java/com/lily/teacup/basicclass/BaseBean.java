@@ -1,4 +1,4 @@
 package com.lily.teacup.basicclass;
 
-class BaseBean {
+public class BaseBean {
 }

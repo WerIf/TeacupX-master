@@ -1,69 +1,113 @@
 package com.lily.teacupx;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.util.Log;
+import android.util.SparseArray;
 
-import com.lily.teacup.banner.TAPBanner;
-import com.lily.teacup.banner.TAPLocalImageSize;
+import com.google.android.material.tabs.TabLayout;
+import com.lily.teacup.annotation.autoknife.FindView;
+import com.lily.teacup.basicclass.BaseActivity;
+import com.lily.teacup.basicclass.BaseFragment;
+import com.lily.teacup.basicclass.ToolBarOptions;
+import com.lily.teacup.fragment_bridge.BridgeManager;
+import com.lily.teacupx.adapter.MainPageAdapter;
+import com.lily.teacupx.ui.fragment.FuFragment;
+import com.lily.teacupx.ui.fragment.OnFragment;
+import com.lily.teacupx.ui.fragment.ThFragment;
+import com.lily.teacupx.ui.fragment.TwFragment;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+
+public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+
     private static final String TAG = MainActivity.class.getSimpleName();
-    private TAPBanner mBackgroundBanner;
-    private TAPBanner mForegroundBanner;
+
+    private String[] tabStr=new String[]{"壹","贰","叁","肆"};
+
+    private BaseFragment[] fragmentList=new BaseFragment[]{
+            new OnFragment(),
+            new TwFragment(),
+            new ThFragment(),
+            new FuFragment()
+    };
+
+    @FindView(R.id.mainTab)
+    TabLayout mainTab;
+
+    @FindView(R.id.mainPage)
+    ViewPager mainPage;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void beforeOnCreate() {
 
-        initView();
-        setListener();
-        processLogic();
-    }
-
-    private void initView() {
-        mBackgroundBanner = findViewById(R.id.banner_guide_background);
-        mForegroundBanner = findViewById(R.id.banner_guide_foreground);
-    }
-
-    private void setListener() {
-        /**
-         * 设置进入按钮和跳过按钮控件资源 id 及其点击事件
-         * 如果进入按钮和跳过按钮有一个不存在的话就传 0
-         * 在 BGABanner 里已经帮开发者处理了防止重复点击事件
-         * 在 BGABanner 里已经帮开发者处理了「跳过按钮」和「进入按钮」的显示与隐藏
-         */
-        mForegroundBanner.setEnterSkipViewIdAndDelegate(R.id.btn_guide_enter, R.id.tv_guide_skip, new TAPBanner.GuideDelegate() {
-            @Override
-            public void onClickEnterOrSkip() {
-                startActivity(new Intent(MainActivity.this, MainActivity.class));
-                finish();
-            }
-        });
-    }
-
-    private void processLogic() {
-        // Bitmap 的宽高在 maxWidth maxHeight 和 minWidth minHeight 之间
-        TAPLocalImageSize localImageSize = new TAPLocalImageSize(720, 1280, 320, 640);
-        // 设置数据源
-        mBackgroundBanner.setData(localImageSize, ImageView.ScaleType.CENTER_CROP,
-                R.drawable.uoko_guide_background_1,
-                R.drawable.uoko_guide_background_2,
-                R.drawable.uoko_guide_background_3);
-
-        mForegroundBanner.setData(localImageSize, ImageView.ScaleType.CENTER_CROP,
-                R.drawable.uoko_guide_foreground_1,
-                R.drawable.uoko_guide_foreground_2,
-                R.drawable.uoko_guide_foreground_3);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public int getContentViewResId() {
+        return R.layout.activity_main;
+    }
 
-        // 如果开发者的引导页主题是透明的，需要在界面可见时给背景 Banner 设置一个白色背景，避免滑动过程中两个 Banner 都设置透明度后能看到 Launcher
-        mBackgroundBanner.setBackgroundResource(android.R.color.white);
+    @Override
+    public void init(Bundle savedInstanceState) {
+        SkipToManager.SkipToGuide(this);
+    }
+
+    @Override
+    public BridgeManager backBaseBridge(BridgeManager bridgeManager) {
+        return null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(null==data)return;
+
+        switch (requestCode){
+            case SkipToManager.GUIDE_CODE:
+
+                initMainPage();
+                break;
+        }
+
+    }
+
+    private void initMainPage() {
+
+        ToolBarOptions options=new ToolBarOptions();
+        options.titleString=getString(R.string.app_name);
+        options.logoId=R.mipmap.tp_icon;
+        options.titleColor=R.color.white;
+        setToolbar(R.id.mainBar,options);
+
+        MainPageAdapter adapter=new MainPageAdapter(getSupportFragmentManager(),fragmentList,tabStr);
+
+        mainPage.addOnPageChangeListener(this);
+
+        mainPage.setAdapter(adapter);
+
+        mainTab.setupWithViewPager(mainPage);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }
