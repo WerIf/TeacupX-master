@@ -9,9 +9,13 @@ import com.lily.teacup.banner.TAPLocalImageSize;
 import com.lily.teacup.basicclass.BaseActivity;
 import com.lily.teacup.fragment_bridge.BridgeManager;
 import com.lily.teacup.tools.FullWindows;
+import com.lily.teacupx.DataManager;
 import com.lily.teacupx.MainActivity;
 import com.lily.teacupx.R;
 import com.lily.teacupx.SkipToManager;
+import com.lily.teacupx.TpxApplication;
+import com.lily.teacupx.db.StarBeanInfo;
+import com.lily.teacupx.tool.DataBaseUtils;
 
 public class GuideActivity extends BaseActivity {
     private TAPBanner mBackgroundBanner;
@@ -34,6 +38,44 @@ public class GuideActivity extends BaseActivity {
         initView();
         setListener();
         processLogic();
+
+        LoadAppData();
+    }
+
+    private void LoadAppData() {
+        DataManager dataManager=new DataManager();
+        for (int i=0;i<dataManager.nameList.length;i++){
+            StarBeanInfo info=new StarBeanInfo();
+            info.setName(dataManager.nameList[i]);
+            info.setNickName(dataManager.nickName[i]);
+            info.setBlood(dataManager.blood[i]);
+            info.setStature(dataManager.stature[i]);
+            info.setAge(dataManager.year[i]);
+            info.setAddress(dataManager.address[i]);
+            info.setDescription(dataManager.description[i]);
+            info.setDetailsDesc(dataManager.details[i]);
+            info.setCover(dataManager.cover[i]);
+
+            for (int j=0;j<dataManager.starList.get(i).length;j++){
+                switch (j){
+                    case 0:
+                        info.setImage_one(dataManager.starList.get(i)[j]);
+                        break;
+                    case 1:
+                        info.setImage_two(dataManager.starList.get(i)[j]);
+                        break;
+                    case 2:
+                        info.setImage_three(dataManager.starList.get(i)[j]);
+                        break;
+                    case 3:
+                        info.setImage_four(dataManager.starList.get(i)[j]);
+                        break;
+                }
+            }
+
+            DataBaseUtils.getInstance((TpxApplication) getApplication()).insert(info);
+        }
+
     }
 
     @Override

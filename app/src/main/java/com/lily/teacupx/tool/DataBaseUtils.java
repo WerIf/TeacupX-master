@@ -5,8 +5,6 @@ import com.lily.teacupx.db.DaoSession;
 import com.lily.teacupx.db.StarBeanInfo;
 import com.lily.teacupx.db.StarBeanInfoDao;
 
-import org.greenrobot.greendao.query.WhereCondition;
-
 import java.util.List;
 
 /**
